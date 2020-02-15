@@ -150,8 +150,6 @@ class AppointmentControler {
 
     await appointment.save();
 
-    console.log(`########`);
-
     await Queue.add(CancellationMail.key, {
       appointment,
     });
