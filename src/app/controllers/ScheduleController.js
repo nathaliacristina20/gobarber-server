@@ -4,12 +4,9 @@ import User from '../models/User';
 import Appointment from '../models/Appointment';
 
 class ScheduleController {
-  async store(req, res) {
+  async index(req, res) {
     const checkUserProvider = await User.findOne({
-      where: {
-        id: req.userId,
-        provider: true,
-      },
+      where: { id: req.userId, provider: true },
     });
 
     if (!checkUserProvider) {
@@ -27,8 +24,15 @@ class ScheduleController {
           [Op.between]: [startOfDay(parsedDate), endOfDay(parsedDate)],
         },
       },
-      order: ['date'],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name'],
+        },
+      ],
     });
+
     return res.json(appointments);
   }
 }
