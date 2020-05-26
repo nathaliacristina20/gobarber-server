@@ -1,10 +1,12 @@
 import 'dotenv/config';
+
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import Youch from 'youch';
 import * as Sentry from '@sentry/node';
-
 import 'express-async-errors';
+import helmet from 'helmet';
 
 import routes from './routes';
 import sentryConfig from './config/sentry';
@@ -15,13 +17,15 @@ class App {
   constructor() {
     this.server = express();
     Sentry.init(sentryConfig);
-    this.middlewares();
+    this.midlewares();
     this.routes();
     this.exceptionHandler();
   }
 
-  middlewares() {
+  midlewares() {
     this.server.use(Sentry.Handlers.requestHandler());
+    this.server.use(helmet());
+    this.server.use(cors());
     this.server.use(express.json());
     this.server.use(
       '/files',
@@ -40,6 +44,7 @@ class App {
         const errors = await new Youch(err, req).toJSON();
         return res.status(500).json(errors);
       }
+
       return res.status(500).json({ error: 'Internal server error' });
     });
   }
