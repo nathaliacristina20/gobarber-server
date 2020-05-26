@@ -30,6 +30,9 @@ e para barbeiros, permite gerenciar os horários marcados.</p>
 </ul>
 
 ## :computer: Tecnologias
+
+Além das tecnologias abaixo, esta aplicação foi desenvolvida com pattens e recursos avancados! 
+<p>:heart_eyes: <strong>Arquitetura com services</strong> :balance_scale: estratégia de <strong>cache</strong> e :police_car: bibliotecas auxiliares para <strong>segurança</strong> no node.</p>
     
 - [Node.js](https://nodejs.org/en/)
 - [Bee Queue](https://github.com/bee-queue/bee-queue)
