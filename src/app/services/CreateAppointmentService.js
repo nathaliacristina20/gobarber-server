@@ -1,8 +1,7 @@
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
-import pt from 'date-fns/locale/pt';
+import { startOfHour, parseISO, isBefore } from 'date-fns';
+
 import User from '../models/User';
 import Appointment from '../models/Appointment';
-import Notification from '../schemas/Notification';
 import Cache from '../../lib/Cache';
 
 class CreateAppointmentService {
@@ -49,21 +48,21 @@ class CreateAppointmentService {
     /**
      * Notify appointment provider
      */
-    const user = await User.findByPk(user_id);
-    const formattedDate = format(
-      hourStart,
-      "'dia' dd 'de' MMMM', às' H:mm'h'",
-      { locale: pt }
-    );
-    await Notification.create({
-      content: `Novo agendamento de ${user.name} para ${formattedDate}.`,
-      user: provider_id,
-    });
+    // const user = await User.findByPk(user_id);
+    // const formattedDate = format(
+    //   hourStart,
+    //   "'dia' dd 'de' MMMM', às' H:mm'h'",
+    //   { locale: pt }
+    // );
+    // await Notification.create({
+    //   content: `Novo agendamento de ${user.name} para ${formattedDate}.`,
+    //   user: provider_id,
+    // });
 
     /**
      * Invalidate cache
      */
-    await Cache.invalidatePrefix(`user:${user.id}:appointments`);
+    await Cache.invalidatePrefix(`user:${user_id}:appointments`);
     return appointment;
   }
 }

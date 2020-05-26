@@ -12,6 +12,8 @@ import AppointmentController from './app/controllers/AppointmentController';
 import NotificationController from './app/controllers/NotificationController';
 import AvailableController from './app/controllers/AvailableController';
 import auth from './app/middlewares/auth';
+import notification from './app/middlewares/notification';
+
 import ScheduleController from './app/controllers/ScheduleController';
 
 import validateUserStore from './app/validators/UserStore';
@@ -47,6 +49,7 @@ routes.get('/appointments', AppointmentController.index);
 routes.post(
   '/appointments',
   validateAppointmentStore,
+  notification,
   AppointmentController.store
 );
 routes.delete('/appointments/:id', AppointmentController.delete);

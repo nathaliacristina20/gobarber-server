@@ -10,6 +10,8 @@ import helmet from 'helmet';
 import redis from 'redis';
 import RateLimit from 'express-rate-limit';
 import RateLimitRedis from 'express-rate-limit-redis';
+import io from 'socket.io';
+import http from 'http';
 import routes from './routes';
 import sentryConfig from './config/sentry';
 
@@ -17,30 +19,49 @@ import './database';
 
 class App {
   constructor() {
-    this.server = express();
+    this.app = express();
+    this.server = http.Server(this.app);
     Sentry.init(sentryConfig);
+
+    this.socket();
+
     this.midlewares();
     this.routes();
     this.exceptionHandler();
+
+    this.connectedUsers = {};
+  }
+
+  socket() {
+    this.io = io(this.server);
+
+    this.io.on('connection', socket => {
+      const { user_id } = socket.handshake.query;
+      this.connectedUsers[user_id] = socket.id;
+
+      socket.on('desconnect', () => {
+        delete this.connectedUsers[user_id];
+      });
+    });
   }
 
   midlewares() {
-    this.server.use(Sentry.Handlers.requestHandler());
-    this.server.use(helmet());
-    this.server.use(cors());
-    // this.server.use(
+    this.app.use(Sentry.Handlers.requestHandler());
+    this.app.use(helmet());
+    this.app.use(cors());
+    // this.app.use(
     //     cors({
     //         origin: 'https://www.frontend.com.br',
     //     })
     // );
-    this.server.use(express.json());
-    this.server.use(
+    this.app.use(express.json());
+    this.app.use(
       '/files',
       express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
     );
 
     if (process.env.NODE_ENV !== 'development') {
-      this.server.use(
+      this.app.use(
         new RateLimit({
           store: new RateLimitRedis({
             client: redis.createClient({
@@ -53,15 +74,21 @@ class App {
         })
       );
     }
+
+    this.app.use((req, res, next) => {
+      req.io = this.io;
+      req.connectedUsers = this.connectedUsers;
+      next();
+    });
   }
 
   routes() {
-    this.server.use(routes);
-    this.server.use(Sentry.Handlers.errorHandler());
+    this.app.use(routes);
+    this.app.use(Sentry.Handlers.errorHandler());
   }
 
   exceptionHandler() {
-    this.server.use(async (err, req, res, next) => {
+    this.app.use(async (err, req, res, next) => {
       if (process.env.NODE_ENV === 'development') {
         const errors = await new Youch(err, req).toJSON();
         return res.status(500).json(errors);
