@@ -3,6 +3,7 @@ import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import Appointment from '../models/Appointment';
 import Notification from '../schemas/Notification';
+import Cache from '../../lib/Cache';
 
 class CreateAppointmentService {
   async run({ provider_id, date, user_id }) {
@@ -39,6 +40,12 @@ class CreateAppointmentService {
       throw new Error('Appointment date is not available');
     }
 
+    const appointment = await Appointment.create({
+      user_id,
+      provider_id,
+      date: hourStart,
+    });
+
     /**
      * Notify appointment provider
      */
@@ -53,11 +60,11 @@ class CreateAppointmentService {
       user: provider_id,
     });
 
-    await Appointment.create({
-      user_id,
-      provider_id,
-      date: hourStart,
-    });
+    /**
+     * Invalidate cache
+     */
+    await Cache.invalidatePrefix(`user:${user.id}:appointments`);
+    return appointment;
   }
 }
 
