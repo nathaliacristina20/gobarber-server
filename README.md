@@ -92,7 +92,7 @@ Você pode realizar requisições REST através do Insomnia
 
 ```bash
 # Clone o seu fork
-$ git clone url-do-seu-fork && cd gostack-gobarber-server
+$ git clone url-do-seu-fork && cd gobarber-server
 
 # Crie uma branch com sua feature ou correção de bugs
 $ git checkout -b minha-branch
