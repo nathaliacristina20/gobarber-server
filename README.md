@@ -55,6 +55,7 @@ Além das tecnologias abaixo, esta aplicação foi desenvolvida com pattens e re
 - [Helmet](https://github.com/helmetjs/helmet)
 - [Rate Limit](https://github.com/iugu/rate-limiting)
 - [Ioredis](https://github.com/luin/ioredis)
+- [Socket.io](https://socket.io/)
 
 ## :books: Guia de instalação e execução
 
@@ -84,7 +85,7 @@ Para debugar, utilize o comando ```yarn dev:debug```
 
 Você pode realizar requisições REST através do Insomnia
 
-[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=GoBarber&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fnathaliacristina20%2Fgostack-gobarber-server%2Fmaster%2Finsomnia.json)
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=GoBarber&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fnathaliacristina20%2Fgobarber-server%2Fmaster%2F.github%2FInsomnia_2020-05-26.json)
 
 ## :pencil: Como contribuir
 
