@@ -104,3 +104,8 @@ dist
 .tern-port
 
 anotacoes.md
+
+tmp/uploads/*
+
+!tmp/.gitkeep
+!tmp/uploads/.gitkeep
