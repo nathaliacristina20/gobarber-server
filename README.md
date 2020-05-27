@@ -55,6 +55,7 @@ Além das tecnologias abaixo, esta aplicação foi desenvolvida com pattens e re
 - [Helmet](https://github.com/helmetjs/helmet)
 - [Rate Limit](https://github.com/iugu/rate-limiting)
 - [Ioredis](https://github.com/luin/ioredis)
+- [Socket.io](https://socket.io/)
 
 ## :books: Guia de instalação e execução
 
